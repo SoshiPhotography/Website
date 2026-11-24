@@ -38,3 +38,16 @@ content:
       - name: alt
         label: Short description of the photo
         type: string
+
+  - name: home
+    label: Home page photo
+    type: file
+    path: data/home.json
+    format: json
+    fields:
+      - name: photo
+        label: Main photo (use a wide landscape photo, under 1 MB)
+        type: image
+      - name: alt
+        label: Short description of the photo
+        type: string
