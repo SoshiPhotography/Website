@@ -50,8 +50,8 @@
   /* Hero: one signature photo */
   .hero-wrap { position: relative; }
   .hero { min-height: calc(100vh - 100px); display: grid; }
-  /* Replace the background-image below with your photo, e.g.
-     background-image: url("images/signature.jpg"); */
+  /* The photo comes from data/home.json (change it from the admin page);
+     the gradient below shows until a photo is set. */
   .photo {
     background-size: cover; background-position: center; position: relative;
     min-height: 70vh;
@@ -216,6 +216,17 @@
 
 <script>
   document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Home page photo is set in data/home.json (edit it from the admin page).
+  fetch("/data/home.json", { cache: "no-cache" })
+    .then(r => r.ok ? r.json() : null)
+    .catch(() => null)
+    .then(d => {
+      if (!d || !/^\/?[\w\-./%]+$/.test(d.photo || "")) return;
+      const el = document.querySelector(".photo");
+      el.style.backgroundImage = 'url("' + d.photo + '")';
+      if (d.alt) el.setAttribute("aria-label", d.alt);
+    });
 
   // Gently fade the contact section in as it scrolls into view
   if ("IntersectionObserver" in window) {
