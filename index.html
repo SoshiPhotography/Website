@@ -123,6 +123,10 @@
   }
   button:hover { background: var(--accent); }
   .hp { position: absolute; left: -9999px; }  /* spam trap */
+  button:disabled { opacity: .6; cursor: default; }
+  #form-status { min-height: 1.4em; font-size: .95rem; color: var(--muted); }
+  #form-status.ok { color: var(--accent); }
+  #form-status.err { color: #b25a4a; }
 
   /* Fade in when scrolled into view (content stays visible if scripts are off) */
   .reveal-ready .reveal {
@@ -200,6 +204,7 @@
         <label>Message <textarea name="message" required></textarea></label>
         <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit">Send message</button>
+        <p id="form-status" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -227,6 +232,35 @@
       el.style.backgroundImage = 'url("' + d.photo + '")';
       if (d.alt) el.setAttribute("aria-label", d.alt);
     });
+
+  // Send the contact form without leaving the page
+  (function () {
+    const form = document.querySelector("#contact form");
+    const status = document.getElementById("form-status");
+    const btn = form.querySelector("button[type=submit]");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      btn.disabled = true; btn.textContent = "Sending…";
+      status.className = ""; status.textContent = "";
+      try {
+        const res = await fetch(form.action, {
+          method: "POST", body: new FormData(form), headers: { "Accept": "application/json" }
+        });
+        if (res.ok) {
+          form.reset();
+          status.className = "ok";
+          status.textContent = "Thank you! Your message was sent and I'll get back to you soon.";
+        } else {
+          throw new Error("bad response");
+        }
+      } catch (err) {
+        status.className = "err";
+        status.textContent = "Sorry, that didn't go through. Please try again or email info@soshiphotography.com.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Send message";
+      }
+    });
+  })();
 
   // Gently fade the contact section in as it scrolls into view
   if ("IntersectionObserver" in window) {
