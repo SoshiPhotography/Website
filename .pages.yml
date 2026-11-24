@@ -1,0 +1,40 @@
+media:
+  input: images
+  output: /images
+  categories: [image]
+  rename: random
+
+content:
+  - name: galleries
+    label: Client galleries
+    type: file
+    path: data/galleries.json
+    format: json
+    list: true
+    fields:
+      - name: name
+        label: Client name
+        type: string
+        required: true
+      - name: url
+        label: Pixieset gallery link
+        type: string
+        required: true
+      - name: thumbnail
+        label: Thumbnail photo
+        type: image
+
+  - name: portfolio
+    label: Portfolio photos
+    type: file
+    path: data/portfolio.json
+    format: json
+    list: true
+    fields:
+      - name: image
+        label: Photo
+        type: image
+        required: true
+      - name: alt
+        label: Short description of the photo
+        type: string
