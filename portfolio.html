@@ -103,6 +103,26 @@
     nav { gap: 18px; justify-content: center; }
   }
 </style>
+
+<style>
+  /* Keep the logo and menu fixed at the top while scrolling */
+  html { scroll-padding-top: 110px; }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: #ffffff;
+  }
+
+  /* Smaller menu on phones so it doesn't take over the screen */
+  @media (max-width: 760px) {
+    html { scroll-padding-top: 120px; }
+    header { flex-direction: column; gap: 4px; padding: 6px 5vw 8px; }
+    .logo img { height: 46px; }
+    nav { gap: 6px 16px; justify-content: center; }
+    nav a { font-size: .66rem; letter-spacing: .12em; }
+  }
+</style>  
 </head>
 <body>
 
